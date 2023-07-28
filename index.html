@@ -1,0 +1,2265 @@
+<!-- 
+  Bootstrap E-Commerce Website Project
+  Client Side Programming
+  Kent Campbell, w0129816
+  April 9, 2023
+ -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Audio Alchemy</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400&family=Titillium+Web:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+
+    <!-- Lightbox CSS -->
+    <link rel="stylesheet" href="css/ekko-lightbox.css">
+
+    <script type="text/javascript">
+      function getFormData() {
+          // Collect From Field Values
+          var name = $("#name").val();
+          var email = $("#email").val();
+          var subject = $("#subject").val();
+          var message = $("#message").val();
+          var errors = 0;
+
+          // Check for empty fields
+          if (name == "") {
+              $("#nameError").show();
+              errors++;
+          } else {
+              $("#nameError").hide();
+          }
+          if (email == "") {
+              $("#emailError").show();
+              errors++;
+          } else if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+              errors++;
+          }
+          else {
+              $("#emailError").hide();
+          }
+          if (subject == "") {
+              $("#subjectError").show();
+              errors++;
+          } else {
+              $("#subjectError").hide();
+          }
+          if (message == "") {
+              $("#messageError").show();
+              errors++;
+          } else {
+              $("#messageError").hide();
+          }
+
+          // Display Error Indicator or Send Form and Display It
+          if (errors != 0) {
+              $(".formFailure").show();
+              $(".formSuccess").hide();
+              setTimeout(function()
+              { $(".formFailure").remove(); }, 5000);
+              } else {
+              $(".formFailure").hide();
+              
+              // Data to be sent to server
+              var dataForServer = "name=" + name + "&email=" + email + "&subject=" + subject + "&message=" + message;
+
+              // Console log data to be sent.
+              console.log("Data to be sent to server" + dataForServer);
+
+              // AJAX call
+              $.ajax({
+                  type: "post",
+                  url: "contact.php",
+                  data: dataForServer,
+                  success: function(response)
+                  {
+                      if (response != "")
+                      {
+                          console.log("Response from server: " + response);
+                      }
+                  }
+              })
+              // Display Success Indicator
+              $(".formSuccess").show();
+              setTimeout(function()
+              { $(".formSuccess").remove(); }, 5000);
+              // Clear the form
+              clearForm();
+          }
+      }
+
+          function clearForm() {
+          // Clear the form fields
+          $("#name").val("");
+          $("#email").val("");
+          $("#subject").val("");
+          $("#message").val("");
+
+          // Clear the error badges
+          $("#nameError").hide();
+          $("#emailError").hide();
+          $("#subjectError").hide();
+          $("#messageError").hide();
+      }   
+
+      
+  </script>
+ 
+  <style>
+      /* Hide all error messages on initial load */
+      #nameError, #emailError, #subjectError, #messageError {
+          display: none;
+      }
+  </style>
+
+  </head>
+
+  <body>
+
+    <!-- NAV BAR STARTS -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">
+
+        <img onclick="showPage('home')" src="images/logo.png" class="logo" alt="Home">
+
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" onclick="showPage('synths')">Synths and Instruments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showPage('effects')">Effects and Processing</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showPage('samplers')">Samplers and Sequencers</a>
+          </li>
+
+        </ul>
+        <a class="nav-link" href="#">
+        <svg class="cartIcon" onclick="showPage('cart')" xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+        </svg></a>
+
+      </div>
+    </nav>
+    <!-- NAVBAR END -->
+
+    <!-- START OF MAIN BODY -->
+    <main role="main" class="container">
+      <div class="starter-template">
+
+
+        <!-- ****************** HOME PAGE **************************** -->
+        <div id="home" class="content">
+          
+          <!-- Homepage Slider Div -->
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+          </ol>
+        
+          <!-- Slides -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="images/slider/1.png" alt="Synths and Instruments" onclick="showPage('synths')">
+              <div class="carousel-caption">
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/slider/2.png" alt="Effects and Processing" onclick="showPage('effects')">
+              <div class="carousel-caption">
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/slider/3.png" alt="Samplers and Sequencers" onclick="showPage('samplers')">
+              <div class="carousel-caption">
+              </div>
+            </div>
+          </div>
+        
+          <!-- Slider Controls -->
+          <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <br>
+
+
+        <!-- ROW 1 FOR CURRENT DEALS-->
+        <div class="hr-text">
+          <span>CURRENT SALES</span>
+        </div><br>
+        <div class="row">
+
+      <!-- Massive Sale Card -->
+      <div class="col-md-3">
+        <div class="card">
+          <a data-toggle="lightbox" href="images/synths/massive.png">
+          <img class="card-img-top img-clickable" data-toggle="modal" data-target="#imageModal" src="images/synths/massive.png" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">Massive</h5>
+            <p class="card-text">Multiple oscillator modes and advanced modulation capabilities. </p>
+            <h6 class="card-price">
+              <h6 class="sale-price">Sale: $119.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$149.99</h6>
+            </h6><br>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#massiveModal">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overture Sale Card -->
+      <div class="col-md-3">
+        <div class="card">
+          <a data-toggle="lightbox" href="images/synths/overture.png">
+          <img class="card-img-top" src="images/synths/overture.png" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">Overture</h5>
+            <p class="card-text">High-quality samples with advanced articulation and expression controls.</p>
+            <h6 class="card-price">
+              <h6 class="sale-price">Sale: $199.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$249.99</h6>
+            </h6><br>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#overtureModal">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PanCake 2 Sale Card -->
+      <div class="col-md-3">
+        <div class="card">
+          <a data-toggle="lightbox" href="images/effects/pancake2.png">
+          <img class="card-img-top" src="images/effects/pancake2.png" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">PanCake 2</h5>
+            <p class="card-text">Add movement and depth to your mixes with intuitive panning modes and adjustable pan shaping with this versatile panning tool.</p>
+            <h6 class="card-price"><h6 class="sale-price">Sale: $39.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$69.99</h6></h6><br>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#pancake2Modal">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Groose Beat Sale ard -->
+      <div class="col-md-3">
+        <div class="card"><a data-toggle="lightbox" href="images/samplers/groosebeat.png">
+          <img class="card-img-top" src="images/samplers/groosebeat.png" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">Groose Beat</h5>
+            <p class="card-text">Slice, gate, and manipulate digital loops with Groose Beat, an intuitive audio tool with real-time slicing, time-stretching, and pitch-shifting capabilities.</p>
+            <h6 class="card-price"> <h6 class="sale-price">Sale: $79.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$129.99</h6>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#groosebeatModal">View Details</button>
+          </div>
+        </div>
+      </div>
+
+        </div>  <!-- End of ROW 1 Div -->
+
+      
+        <!-- ROW 2 FOR NEW RELEASES-->
+        <div class="hr-text">
+          <span>NEW RELEASES</span>
+        </div><br>
+        <div class="row">
+
+        <!-- RC20 Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/rc20.png">
+            <img class="card-img-top" src="images/effects/rc20.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">RC20</h5>
+              <p class="card-text">Vintage-style processing options, adjustable wow and flutter, and an extensive library of presets.</p>
+              <h6 class="card-price">$149.99</h6>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#rc20Modal">View Details</button>
+            </div>
+          </div>
+      </div>
+
+        <!-- Ample Guitar Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/synths/ampleguitar.png">
+            <img class="card-img-top" src="images/synths/ampleguitar.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Ample Guitar</h5>
+              <p class="card-text">Multiple guitar models with high-quality samples and advanced strumming/picking modes.</p>
+              <h6 class="card-price">$199.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#ampleguitarModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Omnisphere Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/synths/omnisphere.png">
+            <img class="card-img-top" src="images/synths/omnisphere.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Omnisphere</h5>
+              <p class="card-text">Powerful synthesis engine with extensive preset library</p>
+              <h6 class="card-price">$299.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#omnisphereModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FPC Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/samplers/fpc.png">
+            <img class="card-img-top" src="images/samplers/fpc.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">FPC</h5>
+              <p class="card-text">Customize drum sounds and patterns with FPC, a powerful sampler plugin with mapping options, effects, and support for multiple sample formats.</p>
+              <h6 class="card-price">$79.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#fpcModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        </div>  <!-- End of ROW 2 Div -->
+
+
+
+
+        </div> <!-- End of homepage div -->
+
+        <!-- ****************** CART **************************** -->
+        <div id="cart" class="content">
+          
+          <div class="hr-text">
+            <span>SHOPPING CART</span>
+          </div><br>
+
+          <div class="container-fluid">
+            <div class="row cartRow">
+                <div class="col-md-2">
+                    <p class="cartheader">PLUGIN</p>
+                </div>
+                <div class="col-md-6 text-md-left">
+                    
+                </div>
+                <div class="col-md-2 text-md-right">
+                    <p class="cartheader">PRICE</p>
+                </div>
+                <div class="col-md-2 text-md-center">
+                    <p class="cartheader">REMOVE</p>
+                </div>
+            </div><br>
+            <div class="row cartRow">
+                <div class="col-md-2">
+                    <a data-toggle="lightbox" href="images/synths/massive.png">
+                    <img class="img-cart" src="images/synths/massive.png" alt=""></a>
+                </div>
+                <div class="col-md-6 text-md-left">
+                    <p data-toggle="modal" data-target="#massiveModal" class="carttxt cartname">MASSIVE</p>
+                </div>
+                <div class="col-md-2 text-md-right">
+                    <p class="carttxt">$119.99</p>
+                </div>
+                <div class="col-md-2 text-md-center">
+                    <a href="#">REMOVE</a>
+                </div>
+            </div><br>
+            <div class="row cartRow">
+                <div class="col-md-2">
+                    <a data-toggle="lightbox" href="images/effects/vintageverb.png">
+                    <img class="img-cart" src="images/effects/vintageverb.png" alt=""></a>
+                </div>
+                <div class="col-md-6 text-md-left">
+                    <p data-toggle="modal" data-target="#vintageverbModal" class="carttxt cartname">VINTAGE VERB</p>
+                </div>
+                <div class="col-md-2 text-md-right">
+                    <p class="carttxt">$59.99</p>
+                </div>
+                <div class="col-md-2 text-md-center">
+                    <a href="#">REMOVE</a>
+                </div>
+            </div><br>
+            <div class="row cartRow">
+                <div class="col-md-2">
+                    <a data-toggle="lightbox" href="images/effects/rc20.png">
+                    <img class="img-cart" src="images/effects/rc20.png" alt=""></a>
+                </div>
+                <div class="col-md-6 text-md-left">
+                    <p data-toggle="modal" data-target="#rc20Modal" class="carttxt cartname">RC20</p>
+                </div>
+                <div class="col-md-2 text-md-right">
+                    <p class="carttxt">$149.99</p>
+                </div>
+                <div class="col-md-2 text-md-center">
+                    <a href="#">REMOVE</a>
+                </div>
+            </div><br>
+            <div class="row cartRow">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-secondary">
+                        CLEAR CART
+                    </button>
+                </div>
+                <div class="col-md-6 text-md-right"> 
+                    <p class="cartheader">TOTAL:</p>
+                </div>
+                <div class="col-md-2 text-md-right">
+                    <p class="carttxt">$329.97</p>
+                </div>
+                <div class="col-md-2 text-center">
+                    <button type="button" class="btn btn-primary">
+                        CHECKOUT
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        </div> <!-- End of cart div -->
+
+      <!-- ****************** SYNTHS AND INSTRUMENTS ************************* -->
+      <div id="synths" class="content">
+      <!-- ROW 1-->
+      <div class="hr-text">
+        <span>SYNTHS & INSTRUMENTS</span>
+      </div><br>
+      <div class="row">
+
+      <!-- Massive Card -->
+      <div class="col-md-3">
+        <div class="card"><a data-toggle="lightbox" href="images/synths/massive.png">
+          <img class="card-img-top img-clickable" data-toggle="modal" data-target="#imageModal" src="images/synths/massive.png" alt=""></a>
+          <div class="card-body"><div class="saleIcon"><p class="saleText">SALE</p></div>
+            <h5 class="card-title">Massive</h5>
+            <p class="card-text">Multiple oscillator modes and advanced modulation capabilities. </p>
+            <h6 class="card-price">
+              <h6 class="sale-price">Sale: $119.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$149.99</h6>
+            </h6> <br>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#massiveModal">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Serum Card -->
+      <div class="col-md-3">
+        <div class="card"><a data-toggle="lightbox" href="images/synths/serum.png">
+          <img class="card-img-top" src="images/synths/serum.png" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">Serum</h5>
+            <p class="card-text">Endless possibilities with wavetable synthesis engine and extensive modulation. </p>
+            <h6 class="card-price">$189.99</h6> 
+            <button class="btn btn-primary" data-toggle="modal" data-target="#serumModal">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Omnisphere Card -->
+      <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/synths/omnisphere.png">
+            <img class="card-img-top" src="images/synths/omnisphere.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Omnisphere</h5>
+              <p class="card-text">Powerful synthesis engine with extensive preset library</p>
+              <h6 class="card-price">$299.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#omnisphereModal">View Details</button>
+            </div>
+          </div>
+      </div>
+
+      <!-- Ample Guitar Card -->
+      <div class="col-md-3">
+        <div class="card"><a data-toggle="lightbox" href="images/synths/ampleguitar.png">
+          <img class="card-img-top" src="images/synths/ampleguitar.png" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title">Ample Guitar</h5>
+            <p class="card-text">Multiple guitar models with high-quality samples and advanced strumming/picking modes.</p>
+            <h6 class="card-price">$199.99</h6> 
+            <button class="btn btn-primary" data-toggle="modal" data-target="#ampleguitarModal">View Details</button>
+          </div>
+        </div>
+      </div>
+            
+    </div>
+    <!-- SYNTHS ROW 2-->
+    <div class="row">
+        <!-- TyrellN6 Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/synths/tyrelln6.png">
+            <img class="card-img-top" src="images/synths/tyrelln6.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Tyrell N6</h5>
+              <p class="card-text"> Classic analog synth sounds with high-quality samples.</p>
+              <h6 class="card-price">$49.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#tyrelln6Modal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overture Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/synths/overture.png">
+            <img class="card-img-top" src="images/synths/overture.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Overture</h5><div class="saleIcon"><p class="saleText">SALE</p></div>
+              <p class="card-text">High-quality samples with advanced articulation and expression controls.</p>
+              <h6 class="card-price">
+                <h6 class="sale-price">Sale: $199.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$249.99</h6>
+              </h6> <br>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#overtureModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiet Piano Card -->
+        <div class="col-md-3">
+            <div class="card"><a data-toggle="lightbox" href="images/synths/quietpiano.png">
+              <img class="card-img-top" src="images/synths/quietpiano.png" alt=""></a>
+              <div class="card-body">
+                <h5 class="card-title">Quiet Piano</h5>
+                <p class="card-text">Intimate and delicate piano sounds for a soft touch.</p>
+                <h6 class="card-price">$79.99</h6> 
+                <button class="btn btn-primary" data-toggle="modal" data-target="#quietpianoModal">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lofi Keys Card -->
+          <div class="col-md-3">
+            <div class="card"><a data-toggle="lightbox" href="images/synths/lofikeys.png">
+              <img class="card-img-top" src="images/synths/lofikeys.png" alt=""></a>
+              <div class="card-body">
+                <h5 class="card-title">LOFI Keys</h5>
+                <p class="card-text">Vintage lo-fi keyboard sounds for adding character to your tracks.</p>
+                <h6 class="card-price">$59.99</h6> 
+                <button class="btn btn-primary" data-toggle="modal" data-target="#lofikeysModal">View Details</button>
+              </div>
+            </div>
+          </div>
+            
+    </div>
+      </div> <!-- End Synths div -->
+
+        <!-- ****************** EFFECTS AND PROCESSING ************************* -->
+      <div id="effects" class="content">
+        <div class="hr-text">
+          <span>EFFECTS & PROCESSING</span>
+        </div><br>
+        <!-- FXS ROW 1-->
+      <div class="row">
+        <!-- Pro Q3 Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/proq3.png">
+            <img class="card-img-top img-clickable" data-toggle="modal" data-target="#imageModal" src="images/effects/proq3.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Pro Q3</h5>
+              <p class="card-text">Balance your tracks with professional-grade EQ modes, adjustable frequency ranges, and dynamic EQ capabilities.</p>
+              <h6 class="card-price">$229.99</h6>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#proq3Modal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hysteresis Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/hysteresis.png">
+            <img class="card-img-top" src="images/effects/hysteresis.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Hysteresis</h5>
+              <p class="card-text">Explore a world of unique and experimental delays and advanced modulation capabilities.</p>
+              <h6 class="card-price">$49.99</h6>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#hysteresisModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RC20 Card -->
+        <div class="col-md-3">
+            <div class="card"><a data-toggle="lightbox" href="images/effects/rc20.png">
+              <img class="card-img-top" src="images/effects/rc20.png" alt=""></a>
+              <div class="card-body">
+                <h5 class="card-title">RC20</h5>
+                <p class="card-text">Vintage-style processing options, adjustable wow and flutter, and an extensive library of presets.</p>
+                <h6 class="card-price">$149.99</h6>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#rc20Modal">View Details</button>
+              </div>
+            </div>
+        </div>
+
+        <!-- Saturn 2 Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/saturn2.png">
+            <img class="card-img-top" src="images/effects/saturn2.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Saturn 2</h5>
+              <p class="card-text">Sixteen distortion styles, per-band drive and mix controls, and advanced modulation options in this powerful distortion and saturation plugin.</p>
+              <h6 class="card-price">$99.99</h6>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#saturn2Modal">View Details</button>
+            </div>
+          </div>
+        </div>
+              
+      </div>
+      <!-- FX Cards ROW 2-->
+      <div class="row">
+        <!-- PanCake 2 Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/pancake2.png">
+            <img class="card-img-top" src="images/effects/pancake2.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">PanCake 2</h5><div class="saleIcon"><p class="saleText">SALE</p></div>
+              <p class="card-text">Add movement and depth to your mixes with intuitive panning modes and adjustable pan shaping with this versatile panning tool.</p>
+              <h6 class="card-price"><h6 class="sale-price">Sale: $39.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$69.99</h6></h6><br>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#pancake2Modal">View Details</button>
+            </div>
+          </div>
+        </div>
+        <!-- Pro C2 Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/proc2.png">
+            <img class="card-img-top" src="images/effects/proc2.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Pro C2</h5>
+              <p class="card-text">Multiple compression modes, adjustable attack and release times, and side-chain filtering in this powerful compressor.</p>
+              <h6 class="card-price">$149.99</h6>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#proc2Modal">View Details</button>
+            </div>
+          </div>
+        </div>
+        <!-- Vintage Verb Card -->
+        <div class="col-md-3">
+            <div class="card"><a data-toggle="lightbox" href="images/effects/vintageverb.png">
+              <img class="card-img-top" src="images/effects/vintageverb.png" alt=""></a>
+              <div class="card-body">
+                <h5 class="card-title">Vintage Verb</h5>
+                <p class="card-text">Add depth and space vintage-style reverb, adjustable decay time and modulation, and advanced EQ controls in this reverb plugin</p>
+                <h6 class="card-price">$59.99</h6>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#vintageverbModal">View Details</button>
+              </div>
+            </div>
+        </div>
+        <!-- OOT Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/effects/oot.png">
+            <img class="card-img-top" src="images/effects/oot.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">OOT</h5>
+              <p class="card-text">Shape the dynamics of your mix with precision using this versatile multi-band compressor with advanced side-chain processing.</p>
+              <h6 class="card-price">$29.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#ootModal">View Details</button>
+            </div>
+          </div>
+        </div>
+              
+      </div>
+      </div> <!-- End of Effects div -->
+
+      <!-- ****************** SAMPLERS AND SEQUENCERS ************************** -->
+      <div id="samplers" class="content">
+        <div class="hr-text">
+          <span>SAMPLERS & SEQUENCERS</span>
+        </div><br>
+        <!-- ROW 1-->
+        <div class="row">
+
+          <!-- Slice X Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/samplers/slicex.png">
+            <img class="card-img-top" src="images/samplers/slicex.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">SliceX</h5>
+              <p class="card-text">Slice and rearrange audio samples with SliceX, a powerful audio tool with time-stretching, pitch-shifting, and built-in effects.</p>
+              <h6 class="card-price">$89.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#slicexModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FPC Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/samplers/fpc.png">
+            <img class="card-img-top" src="images/samplers/fpc.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">FPC</h5>
+              <p class="card-text">Customize drum sounds and patterns with FPC, a powerful sampler plugin with mapping options, effects, and support for multiple sample formats.</p>
+              <h6 class="card-price">$79.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#fpcModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Groose Beat Card -->
+        <div class="col-md-3">
+            <div class="card"><a data-toggle="lightbox" href="images/samplers/groosebeat.png">
+              <img class="card-img-top" src="images/samplers/groosebeat.png" alt=""></a>
+              <div class="card-body">
+                <div class="saleIcon"><p class="saleText">SALE</p></div>
+                <h5 class="card-title">Groose Beat</h5>
+                <p class="card-text">Slice, gate, and manipulate digital loops with Groose Beat, an intuitive audio tool with real-time slicing, time-stretching, and pitch-shifting capabilities.</p>
+                <h6 class="sale-price">Sale: $79.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$129.99</h6>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#groosebeatModal">View Details</button>
+              </div>
+            </div>
+        </div>
+
+        <!-- Decent Sampler Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/samplers/decentsampler.png">
+            <img class="card-img-top" src="images/samplers/decentsampler.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Decent Sampler</h5>
+              <p class="card-text">Create and manipulate sample libraries with ease using Decent Sampler, a powerful plugin with advanced features and multiple sample format support.</p>
+              <h6 class="card-price">$149.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#decentModal">View Details</button>
+            </div>
+          </div>
+        </div>
+              
+      </div>
+      <!-- ROW 2-->
+      <div class="row">
+        <!-- Drummax Card -->
+        <div class="col-md-3">
+          <div class="card"><a data-toggle="lightbox" href="images/samplers/drummax.png">
+            <img class="card-img-top" src="images/samplers/drummax.png" alt=""></a>
+            <div class="card-body">
+              <h5 class="card-title">Drummax</h5>
+              <p class="card-text">Easily create drum tracks with Drummax, a versatile drum machine plugin with an extensive library of samples, sequencing, and effects.</p>
+              <h6 class="card-price">$99.99</h6> 
+              <button class="btn btn-primary" data-toggle="modal" data-target="#drummaxModal">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        
+              
+      </div>
+      </div> <!-- End of Sampler div -->
+
+      <!-- ****************** ABOUT **************************** -->
+      <div id="about" class="content">
+      
+      <div class="hr-text">
+        <span>ABOUT US</span>
+      </div><br>
+      <p class="text-justify abouttxt">
+        <a data-toggle="lightbox" data-gallery="about" href="images/aboutus/team2.jpg">
+        <img class="d-inline aboutimg" src="images/aboutus/team2.jpg" alt="The Audio Alchemy Team"></a>
+        &emsp;&emsp;Audio Alchemy is a music and technology company rooted in   Cape Breton, Nova Scotia, Canada.
+        Our passion is to provide innovative software plugins that empower music creators to express their creativity in the digital music production world.
+        <br><br>
+        &emsp;&emsp;Our team of experienced music producers and software engineers work tirelessly to develop cutting-edge plugins that deliver professional-quality sound, intuitive user interfaces, and seamless integration with popular digital audio workstations (DAWs).
+        We understand the needs and challenges of modern music production, and our plugins are designed to streamline workflows, inspire creativity, and elevate the quality of music productions.
+        <a data-toggle="lightbox" data-gallery="about" href="images/aboutus/office2.jpg">
+          <img class="d-inline aboutimg2" src="images/aboutus/office2.jpg" alt="The Audio Alchemy Offices"></a>
+        <br><br>
+        &emsp;&emsp;We take pride in delivering products that are reliable, efficient, and easy to use, catering to both amateur music producers and seasoned professionals alike.
+        With a strong commitment to customer satisfaction, we strive to provide exceptional customer support, regular software updates, and an active community forum for users to connect, learn, and share their experiences.
+        Thank you for choosing our plugins as your creative tools for digital music production.
+        We are excited to be part of your musical journey and look forward to helping you achieve your artistic vision.
+        Explore our website to learn more about our products, and don't hesitate to contact us if you have any questions or feedback.
+        <br><br>
+        Let's make music together!
+      </p>
+      
+      </div> <!-- End of About div -->
+
+      <!-- ****************** CONTACT **************************** -->
+      <div id="contact" class="content">
+
+        <div class="hr-text">
+          <span>CONTACT US</span>
+        </div><br><br>
+
+        <form class="contactForm text-left" id="form" name="form1" method="post" action="javascript:getFormData()">
+          <input class="textField" type="text" name="name" id="name" value="" alt="" placeholder="Full Name"></input>
+
+          <span id="nameError" class="badge-danger errors float-right">NAME REQUIRED</span>
+          
+          <br><br>
+
+          <input class="textField" type="text" name="email" id="email" value="" alt="" placeholder="Email Address"></input>
+          <span id="emailError" class="badge-danger errors float-right">EMAIL REQUIRED</span>
+          <br><br>
+
+
+          <input class="textField" type="text" name="subject" id="subject" value="" alt="" placeholder="Subject"></input>
+          <span id="subjectError" class="badge-danger errors float-right">SUBJECT REQUIRED</span>
+          <br><br>
+
+
+          <textarea class="textArea" name="message" id="message" rows="10" cols="30" placeholder="Message"></textarea>
+          <span id="messageError" class="badge-danger errors float-right">MESSAGE REQUIRED</span>
+          <br><br>
+
+          <div class="text-center">
+          <input class="btn-secondary btn contactBtn" value="Clear Form" onclick="clearForm()">
+
+          <div class="formChecker">
+            <p class="formSuccess alert-success"> Form Sent Successfully!</p>
+            <p class="formFailure alert-warning"> Form Failed to Send.</p>
+          </div>        
+
+
+          <input class="btn-primary btn contactBtn" type="submit" name="submit" id="submit" value="Submit Message">
+          </div>
+
+        </form><br><br><br>
+        
+
+        </div> <!-- End of Contact div -->
+        
+      <!-- ************ FOOTER (ON ALL PAGES) ****************** -->
+      <footer class="sticky-bottom">
+        <div class="bg-dark">
+          <div class="container">
+            <div class="row">
+      
+              <div class="col-sm-2">
+                <div class="footer-box">
+                  <ul class="list-group-item-light bg-dark">
+                    <li><a class="ftlink" onclick="showPage('home')">Home</a></li>
+                    <li><a class="ftlink" onclick="showPage('synths')">Synths</a></li>
+                    <li><a class="ftlink" onclick="showPage('effects')">Effects</a></li>
+                    <li><a class="ftlink" onclick="showPage('samplers')">Samplers</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-sm-1">
+                <div class="footer-box">
+                  <ul class="list-group-item-light bg-dark">
+                    <li><a class="ftlink" onclick="showPage('about')">About</a></li>
+                    <li><a class="ftlink" onclick="showPage('contact')">Contact</a></li>
+                    <li><a class="ftlink" onclick="showPage('cart')">Shopping Cart</a></li>
+                  </ul>
+                </div>
+              </div>
+      
+              <div class="col-sm-4">
+                <div class="footer-box">
+                  <p class="h4">
+                    Questions?
+                  </p>
+                  
+                  <button class="btn btn-primary" onclick="showPage('contact')">Contact Us</button>
+                </div>
+              </div>
+      
+              <div class="col-sm-2">
+                <div class="footer-box">
+                  <p class="h4">Learn More!</p>
+                
+                  <button class="btn btn-primary" onclick="showPage('about')">About Us</button>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="footer-box">
+                  <p class="text-sm-right">Audio Alchemy - Bootstrap Project<br>Kent Campbell, W0129816<br>April 14th, 2023<br>Client Side Programming<br>NSCC - Marconi Campus</p>
+
+                </div>
+              </div>
+      
+            </div>
+          </div>
+        </div>
+      </footer> <!-- End of Footer div -->
+      
+      <!-- ************************ SYNTH MODALS ********************** -->
+  <!-- MASSIVE MODAL STARTS -->
+<div class="modal fade" id="massiveModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Massive</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <a data-toggle="lightbox" data-gallery="massive" href="images/synths/massive.png">
+          <img src="images/synths/massive.png" alt="Massive Synthesizer" class="img-fluid"></a>
+          <br>
+          
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/massive1.png" data-toggle="lightbox" data-gallery="massive">
+                  <img src="images/synths/massive1.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/massive2.png" data-toggle="lightbox" data-gallery="massive">
+                  <img src="images/synths/massive2.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/massive3.png" data-toggle="lightbox" data-gallery="massive">
+                  <img src="images/synths/massive3.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+        </div>
+        <div class="col-md-6">
+          <p class="lead">Description:</p>
+          <p>Massive is a virtual synthesizer that provides a range of sound design possibilities suitable for any style of music. With its extensive library of presets and advanced features, Massive is a must-have for any producer or composer looking to create unique and innovative sounds.</p>
+          <p class="lead">Features:</p>
+          <ul>
+            <li>Multiple oscillator modes including wavetable, FM, and phase distortion.</li>
+            <li>Advanced modulation capabilities with multiple envelopes and LFOs.</li>
+            <li>Flexible routing options with multiple filter and effects modules.</li>
+            <li>Supports VST, AU, and AAX plugin formats.</li>
+          </ul>
+          <h6 class="card-price">
+            <h6 class="sale-price">Sale: $119.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$149.99</h6>
+          </h6>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Add to Cart</button>
+    </div>
+  </div>
+</div>
+</div>
+  <!-- MODAL ENDS -->
+
+  <!-- SERUM MODAL STARTS -->
+<div class="modal fade" id="serumModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Serum</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6"><a data-toggle="lightbox" data-gallery="serum" href="images/synths/serum.png">
+          <img src="images/synths/serum.png" alt="Serum Synthesizer" class="img-fluid"></a>
+
+          <br>
+          
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/serum.png" data-toggle="lightbox" data-gallery="serum">
+                  <img src="images/synths/serum.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/serum.png" data-toggle="lightbox" data-gallery="serum">
+                  <img src="images/synths/serum.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/serum.png" data-toggle="lightbox" data-gallery="serum">
+                  <img src="images/synths/serum.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+
+        </div>
+        <div class="col-md-6">
+          <p class="lead">Description:</p>
+          <p>Serum is a virtual synthesizer that provides a range of sound design possibilities suitable for any style of music. With its wavetable synthesis engine and extensive modulation capabilities, Serum is a must-have for any producer or composer looking to create unique and innovative sounds.</p>
+          <p class="lead">Features:</p>
+          <ul>
+            <li>Wavetable synthesis engine with a vast library of custom waveforms.</li>
+            <li>Advanced modulation capabilities with multiple envelopes, LFOs, and a drag-and-drop modulation matrix.</li>
+            <li>Flexible routing options with multiple filter and effects modules.</li>
+            <li>Supports VST, AU, and AAX plugin formats.</li>
+          </ul>
+          <h6 class="card-price">Price: $189.99</h6>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Add to Cart</button>
+    </div>
+  </div>
+</div>
+</div>
+  <!-- MODAL ENDS -->
+
+<!-- OMNISPHERE MODAL STARTS -->
+<div class="modal fade" id="omnisphereModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Omnisphere</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6"><a data-toggle="lightbox" data-gallery="omnisphere" href="images/synths/omnisphere.png">
+            <img src="images/synths/omnisphere.png" alt="Omnisphere Synthesizer" class="img-fluid"></a>
+
+          <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/omnisphere1.png" data-toggle="lightbox" data-gallery="omnisphere">
+                  <img src="images/synths/omnisphere1.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/omnisphere2.png" data-toggle="lightbox" data-gallery="omnisphere">
+                  <img src="images/synths/omnisphere2.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/omnisphere3.png" data-toggle="lightbox" data-gallery="omnisphere">
+                  <img src="images/synths/omnisphere3.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Description:</p>
+            <p>Omnisphere is a virtual instrument that provides a vast range of sounds suitable for any style of music. With its powerful synthesis engine and extensive library of presets, Omnisphere is a must-have for any producer or composer looking to create rich and complex soundscapes.</p>
+            <p class="lead">Features:</p>
+            <ul>
+              <li>Multiple synthesis engines including wavetable, granular, and sample-based.</li>
+              <li>Extensive library of over 14,000 presets with custom sound sources.</li>
+              <li>Advanced modulation capabilities with multiple envelopes and LFOs.</li>
+              <li>Supports VST, AU, and AAX plugin formats.</li>
+            </ul>
+            <h6 class="card-price">Price: $299.99</h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- MODAL ENDS -->
+
+    <!-- AMPLE GUITAR MODAL STARTS -->
+<div class="modal fade" id="ampleguitarModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ample Guitar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6"><a data-toggle="lightbox" data-gallery="ampleguitar" href="images/synths/ampleguitar.png">
+            <img src="images/synths/ampleguitar.png" alt="Ample Guitar" class="img-fluid"></a>
+
+            
+          <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/ampleguitar1.png" data-toggle="lightbox" data-gallery="ampleguitar">
+                  <img src="images/synths/ampleguitar1.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/ampleguitar2.png" data-toggle="lightbox" data-gallery="ampleguitar">
+                  <img src="images/synths/ampleguitar2.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/ampleguitar3.png" data-toggle="lightbox" data-gallery="ampleguitar">
+                  <img src="images/synths/ampleguitar3.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Description:</p>
+            <p>Ample Guitar is a virtual instrument that provides a range of guitar sounds suitable for any style of music. With its high-quality samples and advanced features, Ample Guitar is a must-have for any producer or composer looking to add realistic guitar to their tracks.</p>
+            <p class="lead">Features:</p>
+            <ul>
+              <li>Multiple guitar models including acoustic, electric, and bass.</li>
+              <li>High-quality, realistic guitar samples with detailed articulations and velocity layers.</li>
+              <li>Advanced strumming and picking modes.</li>
+              <li>Supports VST, AU, and AAX plugin formats.</li>
+            </ul>
+            <h6 class="card-price">Price: $199.99</h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- MODAL ENDS -->
+
+    
+    <!-- TYRELLN6 MODAL STARTS -->
+<div class="modal fade" id="tyrelln6Modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">TyrellN6</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6"><a data-toggle="lightbox" data-gallery="tyrelln6" href="images/synths/tyrelln6.png">
+            <img src="images/synths/tyrelln6.png" alt="Ample Guitar" class="img-fluid"></a>
+
+            <br>
+          
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/tyrelln6.png" data-toggle="lightbox" data-gallery="tyrelln6">
+                  <img src="images/synths/tyrelln6.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/tyrelln6.png" data-toggle="lightbox" data-gallery="tyrelln6">
+                  <img src="images/synths/tyrelln6.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/tyrelln6.png" data-toggle="lightbox" data-gallery="tyrelln6">
+                  <img src="images/synths/tyrelln6.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Description:</p>
+            <p>TyrellN6 is a virtual synthesizer that provides a range of classic analog synth sounds suitable for any style of music. With its high-quality samples and advanced processing capabilities, TyrellN6 is a great tool for producers and composers looking to add a vintage touch to their tracks.</p>
+            <p class="lead">Features:</p>
+            <ul>
+              <li>
+                Classic analog synth sounds with high-quality samples.</li>
+              <li>Adjustable filter and envelope settings.</li>
+              <li>Advanced modulation capabilities with multiple LFOs and a modulation matrix.</li>
+              <li>Supports VST, AU, and AAX plugin formats.</li>
+            </ul>
+            <h6 class="card-price">Price: $49.99</h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- MODAL ENDS -->
+
+      <!-- OVERTURE MODAL STARTS -->
+<div class="modal fade" id="overtureModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Overture</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6"><a data-toggle="lightbox" data-gallery="overture" href="images/synths/overture.png">
+            <img src="images/synths/overture.png" alt="Overture" class="img-fluid"></a>
+
+          <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/overture1.png" data-toggle="lightbox" data-gallery="overture">
+                  <img src="images/synths/overture1.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/overture2.png" data-toggle="lightbox" data-gallery="overture">
+                  <img src="images/synths/overture2.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/overture3.png" data-toggle="lightbox" data-gallery="overture">
+                  <img src="images/synths/overture3.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Description:</p>
+            <p>Overture is a virtual orchestral instrument that provides a range of realistic orchestral sounds suitable for any style of music. With its high-quality samples and advanced features, Overture is a great tool for composers looking to add a touch of realism to their orchestral arrangements.</p>
+            <p class="lead">Features:</p>
+            <ul>
+              <li>High-quality orchestral samples including strings, woodwinds, brass, and percussion.</li>
+              <li>Advanced articulation and expression controls.</li>
+              <li>Adjustable room and reverb settings.</li>
+              <li>Supports VST, AU, and AAX plugin formats.</li>
+            </ul>
+            <h6 class="card-price">
+              <h6 class="sale-price">Sale: $199.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$249.99</h6>
+            </h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- MODAL ENDS -->
+
+<!-- QUIET PIANO MODAL STARTS -->
+  <div class="modal fade" id="quietpianoModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Quiet Piano</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6"><a data-toggle="lightbox" data-gallery="quietpiano" href="images/synths/quietpiano.png">
+                      <img src="images/synths/quietpiano.png" alt="Quiet Piano" class="img-fluid"></a>
+
+                    <br>
+                          <!-- Smaller Gallery -->
+                          <div class="container mt-5">
+                            <div class="row">
+                              <div class="col-md-4">
+                                <a href="images/synths/quietpiano.png" data-toggle="lightbox" data-gallery="quietpiano">
+                                  <img src="images/synths/quietpiano.png" alt="Image 1" class="img-fluid imgGal">
+                                </a>
+                              </div>
+                              <div class="col-md-4">
+                                <a href="images/synths/quietpiano.png" data-toggle="lightbox" data-gallery="quietpiano">
+                                  <img src="images/synths/quietpiano.png" alt="Image 1" class="img-fluid imgGal">
+                                </a>
+                              </div>
+                              <div class="col-md-4">
+                                <a href="images/synths/quietpiano.png" data-toggle="lightbox" data-gallery="quietpiano">
+                                  <img src="images/synths/quietpiano.png" alt="Image 1" class="img-fluid imgGal">
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Smaller Gallery Ends -->
+
+                    </div>
+                    <div class="col-md-6">
+                      <p class="lead">Description:</p>
+                      <p>Quiet Piano is a virtual instrument that provides a range of intimate and delicate piano sounds suitable for any style of music. With its high-quality samples and advanced processing capabilities, Quiet Piano is a great tool for producers and composers looking to add a soft touch to their tracks. </p>
+                      <p class="lead">Features:</p>
+                      <ul>
+                        <li>High-quality piano samples with soft and intimate playing style.</li>
+                        <li>Adjustable EQ and reverb settings.</li>
+                        <li>MIDI learn and automation capabilities.</li>
+                        <li>Supports VST, AU, and AAX plugin formats.</li>
+                      </ul>
+                      <h6 class="card-price">Price: $79.99</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+    </div>
+      <!-- MODAL ENDS -->
+
+<!-- LOFI KEYS MODAL STARTS -->
+  <div class="modal fade" id="lofikeysModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Lofi Keys</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6"><a data-toggle="lightbox" data-gallery="lofikeys" href="images/synths/lofikeys.png">
+                  <img src="images/synths/lofikeys.png" alt="Lofi Keys" class="img-fluid"></a>
+
+                  <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/synths/lofikeys.png" data-toggle="lightbox" data-gallery="lofikeys">
+                  <img src="images/synths/lofikeys.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/lofikeys.png" data-toggle="lightbox" data-gallery="lofikeys">
+                  <img src="images/synths/lofikeys.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/synths/lofikeys.png" data-toggle="lightbox" data-gallery="lofikeys">
+                  <img src="images/synths/lofikeys.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+                </div>
+                <div class="col-md-6">
+                  <p class="lead">Description:</p>
+                  <p>Lofi Keys is a virtual instrument that provides a range of lo-fi keyboard sounds suitable for any genre of music. With its vintage sound and advanced features, Lofi Keys is a great tool for producers and composers looking to add some character to their music.</p>
+                  <p class="lead">Features:</p>
+                  <ul>
+                    <li>High-quality, vintage keyboard samples with lo-fi processing.</li>
+                    <li>Adjustable tape and vinyl emulation settings.</li>
+                    <li>Intuitive and easy-to-use interface.</li>
+                    <li>Supports VST, AU, and AAX plugin formats.</li>
+                  </ul>
+                  <h6 class="card-price">Price: $59.99</h6>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+   </div>
+    <!-- MODAL ENDS -->
+<!-- ************************ SYNTH MODALS END ********************** -->
+
+      <!-- ************************ EFFECTS MODALS ********************** -->
+  <!-- MODAL STARTS PRO Q-->
+  <div class="modal fade" id="proq3Modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pro Q3</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6"><a data-toggle="lightbox" data-gallery="proq3" href="images/effects/proq3.png">
+              <img src="images/effects/proq3.png" alt="Pro Q Equalizer" class="img-fluid"></a>
+
+              
+              <br>
+              <!-- Smaller Gallery -->
+              <div class="container mt-5">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a href="images/effects/proq3.png" data-toggle="lightbox" data-gallery="proq3">
+                      <img src="images/effects/proq3.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/effects/proq3.png" data-toggle="lightbox" data-gallery="proq3">
+                      <img src="images/effects/proq3.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/effects/proq3.png" data-toggle="lightbox" data-gallery="proq3">
+                      <img src="images/effects/proq3.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!-- Smaller Gallery Ends -->
+
+            </div>
+            <div class="col-md-6">
+              <p class="lead">Description:</p>
+              <p>Pro Q3 is a professional-grade EQ that provides a range of precise and transparent equalization options suitable for any style of music. With its advanced processing capabilities and intuitive interface, Pro Q3 is a great tool for producers and mix engineers looking to shape the tonal balance of their tracks.</p>
+              <p class="lead">Features:</p>
+              <ul>
+                <li>Multiple EQ modes including linear phase, minimum phase, and natural phase.</li>
+                <li>Adjustable Q factor and frequency range.</li>
+                <li>Dynamic EQ with adjustable threshold and ratio.</li>
+                <li>Advanced spectrum analyzer with real-time visual feedback.</li>
+              </ul>
+              <h6 class="card-price">Price: $229.99</h6>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    </div>
+      <!-- MODAL ENDS PRO Q -->
+    
+      <!-- MODAL STARTS HYSTERESIS-->
+    <div class="modal fade" id="hysteresisModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Hysteresis</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6"><a data-toggle="lightbox" data-gallery="hysteresis" href="images/effects/hysteresis.png">
+              <img src="images/effects/hysteresis.png" alt="Hysteresis Delay" class="img-fluid"></a>
+
+              <br>
+              <!-- Smaller Gallery -->
+              <div class="container mt-5">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a href="images/effects/hysteresis.png" data-toggle="lightbox" data-gallery="hysteresis">
+                      <img src="images/effects/hysteresis.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/effects/hysteresis.png" data-toggle="lightbox" data-gallery="hysteresis">
+                      <img src="images/effects/hysteresis.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/effects/hysteresis.png" data-toggle="lightbox" data-gallery="hysteresis">
+                      <img src="images/effects/hysteresis.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!-- Smaller Gallery Ends -->
+
+            </div>
+            <div class="col-md-6">
+              <p class="lead">Description:</p>
+              <p>Hysteresis is a creative delay effect that provides a range of unique and experimental sounds suitable for any style of music. With its flexible routing options and advanced modulation capabilities, Hysteresis is a must-have for any producer or sound designer looking to create unconventional sounds.</p>
+              <p class="lead">Features:</p>
+              <ul>
+                <li>Multiple delay modes including tape, digital, and granular.</li>
+                <li>Advanced modulation capabilities with multiple LFOs and a modulation matrix.</li>
+                <li>Flexible routing options with multiple filter and effects modules.</li>
+                <li>Supports VST, AU, and AAX plugin formats.</li>
+              </ul>
+              <h6 class="card-price">Price: $49.99</h6>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    </div>
+      <!-- MODAL ENDS HYSTERESIS-->
+    
+    <!-- MODAL STARTS RC20-->
+    <div class="modal fade" id="rc20Modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">RC20</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6"><a data-toggle="lightbox" data-gallery="rc20" href="images/effects/rc20.png">
+                <img src="images/effects/rc20.png" alt="RC20 Effects" class="img-fluid"></a>
+
+                
+          <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/effects/rc201.png" data-toggle="lightbox" data-gallery="rc20">
+                  <img src="images/effects/rc201.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/effects/rc202.png" data-toggle="lightbox" data-gallery="rc20">
+                  <img src="images/effects/rc202.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/effects/rc203.png" data-toggle="lightbox" data-gallery="rc20">
+                  <img src="images/effects/rc203.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+                
+
+              </div>
+              <div class="col-md-6">
+                <p class="lead">Description:</p>
+                <p>RC20 is a creative effects plugin that provides a range of vintage-style processing options suitable for any style of music. With its extensive library of presets and advanced processing capabilities, RC20 is a must-have for any producer or sound designer looking to add warmth and character to their tracks.</p>
+                <p class="lead">Features:</p>
+                <ul>
+                  <li>Multiple vintage-style effects including tape emulation, distortion, and noise reduction.</li>
+                  <li>Adjustable wow and flutter, tape saturation, and frequency response.</li>
+                  <li>Extensive library of presets.</li>
+                  <li>Supports VST, AU, and AAX plugin formats.</li>
+                </ul>
+                <h6 class="card-price">Price: $149.99</h6>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      </div>
+        <!-- MODAL ENDS RC20-->
+    
+        <!-- MODAL STARTS SATURN 2-->
+    <div class="modal fade" id="saturn2Modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Saturn 2</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6"><a data-toggle="lightbox" data-gallery="saturn2" href="images/effects/saturn2.png">
+                <img src="images/effects/saturn2.png" alt="Saturn 2 Distortion" class="img-fluid"></a>
+
+                <br>
+              <!-- Smaller Gallery -->
+              <div class="container mt-5">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a href="images/effects/saturn2.png" data-toggle="lightbox" data-gallery="saturn2">
+                      <img src="images/effects/saturn2.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/effects/saturn2.png" data-toggle="lightbox" data-gallery="saturn2">
+                      <img src="images/effects/saturn2.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/effects/saturn2.png" data-toggle="lightbox" data-gallery="saturn2">
+                      <img src="images/effects/saturn2.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!-- Smaller Gallery Ends -->
+
+              </div>
+              <div class="col-md-6">
+                <p class="lead">Description:</p>
+                <p>FabFilter Saturn 2 is a powerful distortion and saturation plugin that offers a wide range of sonic possibilities suitable for any musical style. With its intuitive interface, advanced processing capabilities, and extensive modulation options, Saturn 2 is a versatile tool for producers and sound designers looking to add warmth, color, and texture to their mixes.</p>
+                <p class="lead">Features:</p>
+                <ul>
+                  <li>Sixteen distortion styles including tube, tape, and guitar amp emulations.</li>
+                  <li>Per-band drive, mix, feedback, and tone controls.</li>
+                  <li>Advanced modulation options with multiple LFOs, envelope followers, and XY controllers.</li>
+                  <li>
+                    Interactive multiband display for easy visual feedback and control.</li>
+                </ul>
+                <h6 class="card-price">Price: $99.99</h6>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      </div>
+        <!-- MODAL ENDS SATURN 2-->
+    
+        <!-- MODAL STARTS PANCAKE 2-->
+    <div class="modal fade" id="pancake2Modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">PanCake 2</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6"><a data-toggle="lightbox"  data-gallery="pancake2" href="images/effects/pancake2.png">
+                <img src="images/effects/pancake2.png" alt="PanCake 2 Panning" class="img-fluid"></a>
+                
+          <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/effects/pancake21.png" data-toggle="lightbox" data-gallery="pancake2">
+                  <img src="images/effects/pancake21.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/effects/pancake22.png" data-toggle="lightbox" data-gallery="pancake2">
+                  <img src="images/effects/pancake22.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/effects/pancake23.png" data-toggle="lightbox" data-gallery="pancake2">
+                  <img src="images/effects/pancake23.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+              </div>
+              <div class="col-md-6">
+                <p class="lead">Description:</p>
+                <p>With its intuitive interface and advanced features, Pancake 2 provides users with a wide range of creative possibilities, from simple left-right panning to complex, dynamic panning movements. It offers precise control over panning parameters such as speed, direction, width, and modulation, allowing for precise and expressive sound placement in the stereo field.</p>
+                <p class="lead">Features:</p>
+                <ul>
+                  <li>Adjustable panning modes including LFO, step, and random.</li>
+                  <li>Adjustable pan shape and width.</li>
+                  <li>Intuitive and easy-to-use interface.</li>
+                  <li>MIDI learn and automation capabilities.</li>
+                </ul>
+                <h6 class="card-price">
+                  <h6 class="sale-price">Sale: $39.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$69.99</h6>
+                </h6>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      </div>
+        <!-- MODAL ENDS PANCAKE 2-->
+    
+          <!-- MODAL STARTS PRO 2 C-->
+    <div class="modal fade" id="proc2Modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Pro C2</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6"><a data-toggle="lightbox" data-gallery="proc2" href="images/effects/proc2.png">
+                <img src="images/effects/proc2.png" alt="Pro C2 compressor" class="img-fluid"></a>
+
+                <br>
+                <!-- Smaller Gallery -->
+                <div class="container mt-5">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <a href="images/effects/proc2.png" data-toggle="lightbox" data-gallery="proc2">
+                        <img src="images/effects/proc2.png" alt="Image 1" class="img-fluid imgGal">
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="images/effects/proc2.png" data-toggle="lightbox" data-gallery="proc2">
+                        <img src="images/effects/proc2.png" alt="Image 1" class="img-fluid imgGal">
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="images/effects/proc2.png" data-toggle="lightbox" data-gallery="proc2">
+                        <img src="images/effects/proc2.png" alt="Image 1" class="img-fluid imgGal">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Smaller Gallery Ends -->
+
+              </div>
+              <div class="col-md-6">
+                <p class="lead">Description:</p>
+                <p>Pro C2 is a powerful compressor that provides precise control over the dynamics of your mix. With its advanced processing capabilities and extensive range of presets, Pro C2 is a great tool for producers and mix engineers looking to shape the tone and texture of their tracks.</p>
+                <p class="lead">Features:</p>
+                <ul>
+                  <li>Multiple compression modes including classic, clean, and opto.</li>
+                  <li>Adjustable attack and release times.</li>
+                  <li>Adjustable ratio, threshold, and makeup gain.</li>
+                  <li>Side-chain filtering and EQ.</li>
+                </ul>
+                <h6 class="card-price">Price: $149.99</h6>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      </div>
+        <!-- MODAL ENDS PRO 2 C-->
+    
+      <!-- MODAL STARTS VINTAGE VERB -->
+      <div class="modal fade" id="vintageverbModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Vintage Verb</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6"><a data-toggle="lightbox" data-gallery="vintageverb" href="images/effects/vintageverb.png">
+                          <img src="images/effects/vintageverb.png" alt="Vintage Verb Reverb" class="img-fluid"></a>
+
+                          <br>
+                <!-- Smaller Gallery -->
+                <div class="container mt-5">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <a href="images/effects/vintageverb.png" data-toggle="lightbox" data-gallery="vintageverb">
+                        <img src="images/effects/vintageverb.png" alt="Image 1" class="img-fluid imgGal">
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="images/effects/vintageverb.png" data-toggle="lightbox" data-gallery="vintageverb">
+                        <img src="images/effects/vintageverb.png" alt="Image 1" class="img-fluid imgGal">
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="images/effects/vintageverb.png" data-toggle="lightbox" data-gallery="vintageverb">
+                        <img src="images/effects/vintageverb.png" alt="Image 1" class="img-fluid imgGal">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Smaller Gallery Ends -->
+
+                        </div>
+                        <div class="col-md-6">
+                          <p class="lead">Description:</p>
+                          <p>Vintage Verb is a high-quality reverb plugin that provides a range of vintage-style reverberation options suitable for any style of music. With its advanced processing capabilities and intuitive interface, Vintage Verb is a great tool for producers and mix engineers looking to add depth and space to their tracks.</p>
+                          <p class="lead">Features:</p>
+                          <ul>
+                            <li>Multiple reverb modes including plate, spring, and hall.</li>
+                            <li>Adjustable decay time, pre-delay, and modulation.</li>
+                            <li>Advanced EQ and damping controls.</li>
+                            <li>Supports VST, AU, and AAX plugin formats.</li>
+                          </ul>
+                          <h6 class="card-price">Price: $59.99</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Add to Cart</button>
+                    </div>
+                  </div>
+                </div>
+        </div>
+      <!-- MODAL ENDS VINTAGE VERB-->
+    
+    <!-- MODAL STARTS OOT -->
+      <div class="modal fade" id="ootModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">OOT</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6"><a data-toggle="lightbox" data-gallery="oot" href="images/effects/oot.png">
+                      <img src="images/effects/oot.png" alt="OOT Multiband Compressor" class="img-fluid"></a>
+
+                      <br>
+                      <!-- Smaller Gallery -->
+                      <div class="container mt-5">
+                        <div class="row">
+                          <div class="col-md-4">
+                            <a href="images/effects/oot.png" data-toggle="lightbox" data-gallery="oot">
+                              <img src="images/effects/oot.png" alt="Image 1" class="img-fluid imgGal">
+                            </a>
+                          </div>
+                          <div class="col-md-4">
+                            <a href="images/effects/oot.png" data-toggle="lightbox" data-gallery="oot">
+                              <img src="images/effects/oot.png" alt="Image 1" class="img-fluid imgGal">
+                            </a>
+                          </div>
+                          <div class="col-md-4">
+                            <a href="images/effects/oot.png" data-toggle="lightbox" data-gallery="oot">
+                              <img src="images/effects/oot.png" alt="Image 1" class="img-fluid imgGal">
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Smaller Gallery Ends -->
+
+                    </div>
+                    <div class="col-md-6">
+                      <p class="lead">Description:</p>
+                      <p>OOT is a versatile multi-band compressor that provides precise control over the dynamics of your mix. With its advanced side-chain processing capabilities and easy-to-use interface, OOT is a great tool for producers and mix engineers looking to shape the tone and texture of their tracks.</p>
+                      <p class="lead">Features:</p>
+                      <ul>
+                        <li>Four-band compressor with adjustable crossover points.</li>
+                        <li>Advanced side-chain processing with adjustable filters and EQ.</li>
+                        <li>Adjustable attack and release times.</li>
+                        <li>Supports VST, AU, and AAX plugin formats.</li>
+                      </ul>
+                      <h6 class="card-price">Price: $29.99</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+       </div>
+        <!-- MODAL OOT ENDS -->
+    <!-- ************************ EFFECTS MODALS END ********************** -->
+
+    <!-- ************************ SAMPLERS MODALS START ********************** -->
+<!-- MODAL STARTS SLICE X-->
+<div class="modal fade" id="slicexModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Slice X</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6"><a data-toggle="lightbox" data-gallery="slicex" href="images/samplers/slicex.png">
+            <img src="images/samplers/slicex.png" alt="Pro Q Equalizer" class="img-fluid"></a>
+
+            <br>
+            <!-- Smaller Gallery -->
+            <div class="container mt-5">
+              <div class="row">
+                <div class="col-md-4">
+                  <a href="images/samplers/slicex.png" data-toggle="lightbox" data-gallery="slicex">
+                    <img src="images/samplers/slicex.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="images/samplers/slicex.png" data-toggle="lightbox" data-gallery="slicex">
+                    <img src="images/samplers/slicex.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="images/samplers/slicex.png" data-toggle="lightbox" data-gallery="slicex">
+                    <img src="images/samplers/slicex.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- Smaller Gallery Ends -->
+
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Description:</p>
+            <p>SliceX is a powerful audio manipulation tool that allows you to slice and rearrange audio samples in real-time. With its advanced time-stretching and pitch-shifting capabilities, SliceX is a great tool for any producer or sound designer looking to create unique and creative audio arrangements.</p>
+            <p class="lead">Features:</p>
+            <ul>
+              <li>Real-time audio slicing and rearranging.</li>
+              <li>Advanced time-stretching and pitch-shifting capabilities.</li>
+              <li>Built-in effects including filtering and modulation.</li>
+              <li>Easy-to-use interface with drag-and-drop functionality.</li>
+            </ul>
+            <h6 class="card-price">Price: $89.99</h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- MODAL ENDS SLICE X -->
+  
+    <!-- MODAL STARTS FPC-->
+  <div class="modal fade" id="fpcModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">FPC</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6"><a data-toggle="lightbox" data-gallery="fpc" href="images/samplers/fpc.png">
+            <img src="images/samplers/fpc.png" alt="Hysteresis Delay" class="img-fluid"></a>
+
+            <br>
+            <!-- Smaller Gallery -->
+            <div class="container mt-5">
+              <div class="row">
+                <div class="col-md-4">
+                  <a href="images/samplers/fpc1.png" data-toggle="lightbox" data-gallery="fpc">
+                    <img src="images/samplers/fpc1.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="images/samplers/fpc2.png" data-toggle="lightbox" data-gallery="fpc">
+                    <img src="images/samplers/fpc2.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="images/samplers/fpc3.png" data-toggle="lightbox" data-gallery="fpc">
+                    <img src="images/samplers/fpc3.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- Smaller Gallery Ends -->
+
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Description:</p>
+            <p>FPC is a powerful drum sampler plugin that allows you to create and manipulate your own drum kits. With its intuitive interface and advanced features, FPC is a great tool for any producer or beatmaker looking to create custom drum sounds and patterns.</p>
+            <p class="lead">Features:</p>
+            <ul>
+              <li>Supports multiple sample formats including WAV, AIFF, and MP3.</li>
+              <li>Advanced mapping and layering options.</li>
+              <li>Built-in effects including EQ, compression, and distortion.</li>
+              <li>Easy-to-use interface with drag-and-drop functionality.</li>
+            </ul>
+            <h6 class="card-price">Price: $79.99</h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- MODAL ENDS FPC-->
+  
+  <!-- MODAL STARTS GROOSE BEAT-->
+  <div class="modal fade" id="groosebeatModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Groose Beat</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6"><a data-toggle="lightbox" data-gallery="groosebeat" href="images/samplers/groosebeat.png">
+              <img src="images/samplers/groosebeat.png" alt="Groose Beat Sampler" class="img-fluid"></a>
+
+                              
+          <br>
+          <!-- Smaller Gallery -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-4">
+                <a href="images/samplers/groosebeat1.png" data-toggle="lightbox" data-gallery="groosebeat">
+                  <img src="images/samplers/groosebeat1.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/samplers/groosebeat2.png" data-toggle="lightbox" data-gallery="groosebeat">
+                  <img src="images/samplers/groosebeat2.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+              <div class="col-md-4">
+                <a href="images/samplers/groosebeat3.png" data-toggle="lightbox" data-gallery="groosebeat">
+                  <img src="images/samplers/groosebeat3.png" alt="Image 1" class="img-fluid imgGal">
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Smaller Gallery Ends -->
+
+            </div>
+            <div class="col-md-6">
+              <p class="lead">Description:</p>
+              <p>Groose Beat is a versatile audio manipulation tool that allows you to slice, gate, and manipulate digital loops as if they were on a record. With its intuitive interface and advanced features, Groose Beat is a must-have tool for any producer or DJ looking to create unique and creative arrangements.</p>
+              <p class="lead">Features:</p>
+              <ul>
+                <li>Real-time audio slicing, gating, and manipulation.</li>
+                <li>Advanced time-stretching and pitch-shifting capabilities.</li>
+                <li>Built-in effects including filtering, modulation, and distortion.</li>
+                <li>Supports VST, AU, and AAX plugin formats.</li>
+              </ul>
+              <h6 class="card-price">
+                <h6 class="card-price">
+                  <h6 class="sale-price">Sale: $79.99</h6><h6 class="d-inline original-price">Originally: </h6><h6 class="d-inline strikeout">$129.99</h6>
+                </h6>
+              </h6>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    </div>
+      <!-- MODAL ENDS GROOSE BEAT-->
+  
+      <!-- MODAL STARTS DECENT SAMPLER-->
+  <div class="modal fade" id="decentModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Decent Sampler</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6"><a data-toggle="lightbox" data-gallery="decentsampler" href="images/samplers/decentsampler.png">
+              <img src="images/samplers/decentsampler.png" alt="Decent Sampler" class="img-fluid"></a>
+
+              <br>
+            <!-- Smaller Gallery -->
+            <div class="container mt-5">
+              <div class="row">
+                <div class="col-md-4">
+                  <a href="images/samplers/decentsampler.png" data-toggle="lightbox" data-gallery="decentsampler">
+                    <img src="images/samplers/decentsampler.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="images/samplers/decentsampler.png" data-toggle="lightbox" data-gallery="decentsampler">
+                    <img src="images/samplers/decentsampler.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="images/samplers/decentsampler.png" data-toggle="lightbox" data-gallery="decentsampler">
+                    <img src="images/samplers/decentsampler.png" alt="Image 1" class="img-fluid imgGal">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- Smaller Gallery Ends -->
+
+            </div>
+            <div class="col-md-6">
+              <p class="lead">Description:</p>
+              <p>Decent Sampler is a powerful sampling plugin that allows you to create your own sample libraries and manipulate them with ease. With its user-friendly interface and advanced features, Decent Sampler is a must-have tool for any producer or sound designer looking to take their sample-based creations to the next level.</p>
+              <p class="lead">Features:</p>
+              <ul>
+                <li>Support for multiple sample formats, including WAV, AIFF, and SFZ.</li>
+                <li>Advanced mapping and looping options.</li>
+                <li>Built-in effects including EQ, compression, and reverb.</li>
+                <li>Easy-to-use interface with drag-and-drop functionality.</li>
+              </ul>
+              <h6 class="card-price">Price: $149.99</h6>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    </div>
+      <!-- MODAL ENDS DECENT SAMPLER-->
+  
+      <!-- MODAL STARTS DRUMMAX -->
+  <div class="modal fade" id="drummaxModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Drummax</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6"><a data-toggle="lightbox" data-gallery="drummax" href="images/samplers/drummax.png">
+              <img src="images/samplers/drummax.png" alt="Drummax Sampler" class="img-fluid"></a>
+
+              <br>
+              <!-- Smaller Gallery -->
+              <div class="container mt-5">
+                <div class="row">
+                  <div class="col-md-4">
+                    <a href="images/samplers/drummax.png" data-toggle="lightbox" data-gallery="drummax">
+                      <img src="images/samplers/drummax.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/samplers/drummax.png" data-toggle="lightbox" data-gallery="drummax">
+                      <img src="images/samplers/drummax.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="images/samplers/drummax.png" data-toggle="lightbox" data-gallery="drummax">
+                      <img src="images/samplers/drummax.png" alt="Image 1" class="img-fluid imgGal">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!-- Smaller Gallery Ends -->
+
+            </div>
+            <div class="col-md-6">
+              <p class="lead">Description:</p>
+              <p>Drummax is a versatile drum machine plugin that allows you to create and program your own beats with ease. With its extensive library of drum samples and advanced sequencing capabilities, Drummax is an essential tool for any producer or beatmaker looking to create professional-quality drum tracks.</p>
+              <p class="lead">Features:</p>
+              <ul>
+                <li>Extensive library of drum samples including kicks, snares, hats, and percussion.</li>
+                <li>Advanced step sequencer with adjustable tempo and swing.</li>
+                <li>Multiple effects including compression, distortion, and delay.</li>
+                <li>Compatible with VST, AU, and AAX plugin formats.</li>
+              </ul>
+              <h6 class="card-price">Price: $99.99</h6>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    </div>
+      <!-- MODAL ENDS PANCAKE 2-->
+   
+  </div>
+    </main><!-- /.container -->
+    <!-- END OF MAIN BODY -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ekko-lightbox.js"></script>
+    
+
+    <!-- Custom JavaScript -->
+    <script>
+      // Show the first page by default
+      showPage('home');
+
+      // Show page function
+      function showPage(pageId) {
+        // Set everything to hidden
+        var contents = document.getElementsByClassName('content');
+        for (var i = 0; i < contents.length; i++) {
+          contents[i].classList.remove('active');
+        }
+        // Show the block that matches the pageID parameter
+        var selectedContent = document.getElementById(pageId);
+        selectedContent.classList.add('active');
+
+      }
+
+      // Slider
+      $(document).ready(function() {
+  $('#myCarousel').carousel({
+    interval: 4000 // 4 seconds
+  });
+});
+
+// Lightbox
+$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });
+      </script>
+      
+  </body>
+</html>

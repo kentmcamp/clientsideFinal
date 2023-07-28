@@ -1,0 +1,510 @@
+body {
+  padding-top: 5rem;
+  background-color: rgb(22, 24, 27);
+  font-family: "Titillium Web", sans-serif;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: left;
+}
+.content {
+  display: none;
+}
+.content.active {
+  display: block;
+  background-color: rgb(22, 24, 27);
+}
+a {
+  color: #3698b6;
+  text-decoration: none;
+}
+
+/* BG Color used for navbar and footer */
+.bg-dark {
+  background-color: #313131 !important;
+}
+
+/* The Navbar */
+.logo {
+  height: 75px;
+  padding: 5px;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+  margin: 9px;
+}
+
+.navbar {
+  
+  border-bottom: 1px solid #3698b6;
+}
+
+.navbar-toggler {
+  border: 1px solid rgb(255, 255, 255) !important;
+  color: white !important;
+  margin-right: 15px;
+}
+.navbar-toggler-icon {
+  color: white !important;
+}
+
+.navbar-toggler:hover {
+  background-color: rgb(0, 0, 0) !important;
+  border: 1px solid rgb(255, 255, 255) !important;
+}
+.logo:hover {
+  background-color: rgb(0, 0, 0);
+  scale: 1.1;
+  transition: 0.2s;
+}
+.nav-link {
+  color: rgb(179, 179, 179);
+  font-size: 1.25em;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  text-align: center;
+  padding: 3px !important;
+  margin: 5px 20px !important;
+  
+}
+.nav-link:hover {
+  color: white !important;
+  background-color: rgb(24, 24, 24);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.active {
+  color: black !important;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.navbar-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+}
+/* The shopping cart icon */
+.cartIcon {
+  color: white;
+  padding: 2px;
+  justify-content: right !important;
+}
+
+/* Card Styles */
+.card {
+  background-color: #1f1f1f;
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2c6573;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin-bottom: 50px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #ccc;
+}
+
+.btn-primary {
+  background-color: #2c6573;
+  border-color: #2c6573;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #3698b6;
+  border-color: #3698b6;
+}
+
+.btn-primary:active {
+  background-color: #1d4e5b;
+  border-color: #1d4e5b;
+}
+
+.btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem #2c6573;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-bottom: #2c6573 1px solid;
+}
+
+.card-price {
+  font-family: "Titillium Web", sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #3fb9df; 
+  margin-top: 10px;
+}
+
+.card-title {
+  size: 1em;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  color: #ffffff;
+}
+
+/* For 'Sales' text. */
+.sale-price {
+  font-size: 18px; 
+  color: #df3f4c;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.original-price {
+  font-size: 14px; 
+  color: #ccc;
+  opacity: 0.6;
+}
+.strikeout {
+  font-size: 14px;
+  color: #ccc;
+  opacity: 0.6;
+  text-decoration: line-through; /* Add strikeout line */
+}
+
+/* MODAL STYLES */
+.modal-body {
+  background-color: #1f1f1f;
+  color: #fff;
+}
+
+.modal-header {
+  background-color: #313131;
+  color: #fff;
+  border-bottom: 1px solid #3698b6;
+}
+
+.modal-title {
+  color: #fff;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+}
+
+.modal-header .close {
+  color: #fff;
+}
+
+.modal-footer {
+  background-color: #313131;
+  border-top: 1px solid #3698b6;
+}
+
+.modal-footer .btn-secondary {
+  color: #fff;
+  background-color: #1d4e5b;
+  border: none;
+}
+.modal-footer .btn-primary {
+  color: #fff;
+  background-color: #3698b6;
+  border: none;
+}
+
+.modal-body p,
+.modal-body ul li {
+  color: #fff;
+  padding-left: 10px;
+}
+
+.modal-body img {
+  border: 1px solid #3698b6;
+}
+
+.modal-body ul li::before {
+  color: #2c6573;
+}
+
+.imgGal {
+  /* align images to the center*/
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 120px;
+  height: 100%;
+}
+.imgGal:hover {
+  cursor: pointer;
+  color: #000;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px) scale(1.01);
+}
+
+/* Slider Styles */
+.carousel-item > img {
+  width: 100%;
+  cursor: pointer;
+}
+
+.carousel-indicators li {
+  cursor: pointer;
+}
+
+/* For Text Header Lines */
+.hr-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.hr-text:before,
+.hr-text:after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px solid #3698b6;
+}
+.hr-text:before {
+  margin-right: 0.5em;
+}
+.hr-text:after {
+  margin-left: 0.5em;
+}
+.hr-text > span {
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  font-size: 1.5em;
+  color: #3698b6;
+  padding: 0 0.25em;
+}
+
+/* FOOTER STYLES */
+footer {
+  color: #ccc;
+  border: #3698b6 1px solid;
+}
+
+footer>p,h4,a{
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  color: #ccc !important;
+}
+
+a.ftlink {
+  cursor: pointer;
+  font-family: 'titillium web', sans-serif;
+}
+a.ftlink:hover {
+  cursor: pointer;
+  color: #3fb9df !important;
+  border-radius: 5px;
+}
+/* To center the footer divs */
+.col-sm-3 { 
+  display: flex;
+  flex-wrap: space-evenly;
+  justify-content: center;
+}
+
+.footer-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+}
+
+.text-sm-right {
+  font-size: 0.78em;
+  color: #ccc;
+
+}
+
+/* About us styles */
+.aboutimg {
+  width: 12em;
+  height: 100%;
+  border: #2c6573 1px solid;
+  border-radius: 5px;
+  float: left;
+  margin-right: 1em;
+}
+
+.aboutimg2 {
+  width: 12em;
+  height: 100%;
+  border: #2c6573 1px solid;
+  border-radius: 5px;
+  float: right;
+  margin-left: 1em;
+}
+
+.abouttxt {
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  font-size: 1.2em;
+  color: #fff;
+}
+
+/* Shopping Cart */
+.img-cart {
+  width: 100px;
+  height: 100px;
+
+  object-fit: cover;
+  border: #3fb9df 1px solid;
+  border-radius: 5px;
+}
+
+.cartname {
+  cursor: pointer;
+}
+
+.cartheader {
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  font-weight: bold;
+  font-size: 1.3em;
+  color: #ccc;
+}
+
+.carttxt {
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  font-size: 1.1em;
+  color: #fff;
+}
+
+.cartRow {
+  border-bottom: #2c6573 1px solid;
+  padding-bottom: 1.2em;
+}
+
+
+
+/* Sales Bubbles */
+.saleIcon {
+  display: flex;
+  position: absolute;
+  top: 3%;
+  left: 70%;
+  background-color: #df3f4c;
+  padding: 10px;
+  border: #fff 2px dashed;
+  border-radius: 50%;
+  height: 3em;
+  width: 3em;
+  justify-content: center;
+  box-shadow: -4px 4px 2px 1px rgba(0, 0, 0, .8);
+}
+
+.saleText {
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  font-weight: bold;
+  font-size: 0.90em;
+  color: #fff;
+  margin: auto;
+  margin-left: 0px;
+}
+
+
+/* Contact Forum Styles */
+
+.contactForm {
+  background-color: #313131;
+  color: #fff;
+  border: #3698b6 1px solid;
+  border-radius: 5px;
+  padding: 1em;
+  text-align: left;
+  width: 100%;
+}
+
+.textField {
+  font-family: "titillium web", sans-serif;
+  width: 100%;
+  height: 2.5em;
+  background-color: #212121;
+  color: #ccc;
+  border: #3fb9df 1px solid;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.textField:focus {
+  padding: 10px;
+  background-color: #111111;
+  color: white;
+}
+
+.textArea {
+  padding: 10px;
+  width: 100%;
+  background-color: #212121;
+  color: #ccc;
+  border: #3fb9df 1px solid;
+  border-radius: 5px;
+}
+
+.textArea:focus {
+  padding: 10px;
+  background-color: #111111;
+  color: white;
+}
+
+.text-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+}
+
+.badge-danger {
+  padding: 5px 5px 5px 5px;
+  border-radius: 50px;
+}
+
+.contactBtn {
+  width: 200px;
+  height: 50px;
+}
+
+.formChecker {
+  width: 200px;
+  height: 50px;
+  background-color: #212121;
+  border: #3fb9df 1px solid;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.formSuccess, .formFailure {
+  border-radius: 5px;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica;
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  display: none;
+  width: 200px;
+  height: 50px;
+  margin-top: 1em;
+}
+
+.formFailure {
+  background-color: #df3f4c;
+}
+
+.formSuccess {
+  background-color: #206d46;
+}
+
+/* Places the Error Messages in the field */
+
+#nameError, #emailError, #subjectError, #messageError {
+  border-radius: 50px;
+  position: absolute;
+  transform: translate(-100%, -10%);
+}
